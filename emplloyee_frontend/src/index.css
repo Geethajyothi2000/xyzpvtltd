@@ -14,13 +14,14 @@
 .employeeData{
  background-color: aquamarine;
  border:  1px solid black;
- width: fit-content;
+ width: 100px;
  display: flex;
+
 }
 
 .employeeData div{
   border:  1px solid;
-  width: 130px;
+  width: 150px;
   text-align: center;
   
  }

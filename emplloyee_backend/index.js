@@ -262,22 +262,128 @@ app.post('/addEmployee', async function (req, res) {
    })
 
 
+  
+
+  app.get('/updateAllDataCard', async function (req, res) {
+    try {
+     const result = await db.query("SELECT * FROM turnover");
+     result.rows.forEach( async row => {
+        var {id,pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit} = row;
+        amountout = calculateAmountOut(buyingprice, bought);
+        stock = calculateStock(bought, sold);
+        unitprofit = calculateUnitProfit(sellingprice, sold);
+        profit = calculateTotalProfit( sold, unitprofit);
+        const result1 = await db.query("UPDATE turnover SET pnumber=$2,pname=$3,buyingprice=$4,bought=$5,amountout=$6,sellingprice=$7,sold=$8,stock=$9,unitprofit=$10,profit=$11  WHERE id = $1",
+          [id,pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit]);
+        console.log(result1);
+      });
+     
+     res.json(result.rows);
+  } catch (error) {
+  console.log(error)   
+  }
+   })
+  
+  app.post('/addEmployeeCard', async function (req, res) {
+     
+      let {pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit} = req.body;
+      amountout = calculateAmountOut(buyingprice, bought);
+      stock = calculateStock(bought, sold);
+      unitprofit = calculateUnitProfit(sellingprice, buyingprice);
+      profit = calculateTotalProfit(sold, unitprofit);
+  
+      // console.log(req.body);
+      try {
+       const result =await db.query("INSERT INTO turnover (pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", [pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit])
+       //console.log(result.rows)
+       res.json("success")
+   } catch (error) {
+    console.log(error)   
+   }
+     })
+  
+     app.get('/employeeDataCard', async function (req, res) {
+     
+      try {
+       const result =await db.query("SELECT * FROM turnover");
+       //console.log(result.rows)
+       res.json(result.rows)
+   } catch (error) {
+    console.log(error)   
+   }
+     })
+  
+     app.post('/deleteCard', async function (req, res) {
+  
+      console.log(req.body)
+     
+      try {
+       const result =await db.query("DELETE FROM turnover WHERE id = $1",[req.body.id])
+       //console.log(result.rows)
+       res.json("success")
+  
+   } catch (error) {
+    console.log(error)   
+   }
+     })
+  
+     app.post('/getUpdateDataCard', async function (req, res) {
+   
+      console.log(req.body)
+     
+      try {
+       const result =await db.query("SELECT * FROM turnover WHERE id = $1",[req.body.id])
+      //  console.log(result.rows[0])
+       res.json(result.rows[0])
+       
+   } catch (error) {
+    console.log(error)   
+   }
+     })
+  
+  
+     app.post('/UpdateCard', async function (req, res) {
+   
+      console.log(req.body)
+     let {id,pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit} = req.body
+     amountout = calculateAmountOut(buyingprice, bought);
+     stock = calculateStock(bought, sold);
+     unitprofit = calculateUnitProfit(sellingprice, sold);
+     profit = calculateTotalProfit(  unitprofit , sold);
+      try {
+       const result =await db.query("UPDATE turnover SET pnumber=$2,pname=$3,buyingprice=$4,bought=$5,amountout=$6,sellingprice=$7,sold=$8,stock=$9,unitprofit=$10,profit=$11  WHERE id = $1",
+       [id,pnumber,pname,buyingprice,bought,amountout,sellingprice,sold,stock,unitprofit,profit])
+      //  console.log(result.rows[0])
+      //  console.log(result.rows)
+       res.json("success")
+       
+   } catch (error) {
+    console.log(error)   
+   }
+     })
+  
+  
+
+     function calculateAmountOut(buyingprice, bought){
+      return buyingprice * bought;
+    }
+    
+    function calculateStock(bought, sold){
+      return bought - sold ;
+    }
+    
+    function calculateUnitProfit(sellingprice, buyingprice){
+      return sellingprice - buyingprice;
+    }
+    
+    function calculateTotalProfit(sold, unitprofit){
+      return sold * unitprofit + 99 ;
+    }
+  
+  
+
 app.listen(3001)
 
 
 
-function calculateAmountOut(buyingprice, bought){
-  return buyingprice * bought;
-}
 
-function calculateStock(bought, sold){
-  return bought - sold;
-}
-
-function calculateUnitProfit(sellingprice, buyingprice){
-  return sellingprice - buyingprice;
-}
-
-function calculateTotalProfit(sold, unitprofit){
-  return parseInt(sold * unitprofit);
-}

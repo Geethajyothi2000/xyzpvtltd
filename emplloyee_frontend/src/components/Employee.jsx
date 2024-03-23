@@ -23,9 +23,7 @@ const Employee = () => {
     <>
       
      
-        <button onClick={()=>{
-          navigate("/Aboutus");
-        }}>Aboutus</button>
+      
 
         <button
           onClick={() => {
@@ -67,7 +65,13 @@ const Employee = () => {
         >
           EmployeeCard
         </button>
-
+        <button
+          onClick={() => {
+            navigate("/TurnoverCard");
+          }}
+        >
+          TurnoverCard
+        </button>
 
         <button onClick={updateAllData}>Update Records</button>
 

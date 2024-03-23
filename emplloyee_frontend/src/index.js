@@ -6,6 +6,8 @@ import './index2.css';
 import App from './App';
 import App1 from './App1';
 import App2 from './App2';
+import AppCard from './AppCard';
+import "../src/indexCard.css";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,5 +16,6 @@ root.render(
     <App />
     <App1 />
     <App2 />
+    <AppCard/>
   </React.StrictMode>
 );

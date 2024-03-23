@@ -5,7 +5,6 @@ import axios from 'axios'
 const AddData1 = () => {
     const navigate = useNavigate()
     const [e_name,setName] = useState("")
-    
     const [e_monthly_salary,setMonthlySalary] = useState("")
     const [e_yearly_salary,setYearlySalary] = useState("")
   
