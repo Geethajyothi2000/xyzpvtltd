@@ -377,7 +377,7 @@ app.post('/addEmployee', async function (req, res) {
     }
     
     function calculateTotalProfit(sold, unitprofit){
-      return sold * unitprofit + 99 ;
+      return (sold * unitprofit) ;
     }
   
   
